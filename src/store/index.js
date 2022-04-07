@@ -9,6 +9,7 @@ export default new Vuex.Store({
     statusCartaPorte: false,
     statusPago: false,
     statusComex: false,
+    statusComponent: false,
     form: {
       Version: "4.0",
       Serie: "CP01",
@@ -19,24 +20,6 @@ export default new Vuex.Store({
           Cantidad: 1,
           ClaveUnidad: "ACT",
           Descripcion: "Pago1",
-          ValorUnitario: 0,
-          Importe: 0,
-          ObjetoImp: "01",
-        },
-        {
-          ClaveProdServ: "84111506",
-          Cantidad: 1,
-          ClaveUnidad: "ACT",
-          Descripcion: "Pago2",
-          ValorUnitario: 0,
-          Importe: 0,
-          ObjetoImp: "01",
-        },
-        {
-          ClaveProdServ: "84111506",
-          Cantidad: 1,
-          ClaveUnidad: "ACT",
-          Descripcion: "Pago3",
           ValorUnitario: 0,
           Importe: 0,
           ObjetoImp: "01",
@@ -82,8 +65,18 @@ export default new Vuex.Store({
         ObjetoImp: "01",
       });
     },
-    addConcepto2(state, form) {
-      state.form.Conceptos.push(form);
+    addInformacionGlobal(state) {
+      let InformacionGlobal = {
+        Periodicidad: "Mensual",
+        Meses: "Abril",
+        Año: new Date().getFullYear(),
+      };
+
+      if (state.statusComponent) {
+        state.form.InformacionGlobal = InformacionGlobal;
+      } else {
+        delete state.form.InformacionGlobal;
+      }
     },
     deleteConcepto(state, index) {
       state.form.Conceptos.splice(index, 1);
