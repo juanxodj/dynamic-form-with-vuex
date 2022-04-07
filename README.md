@@ -1,4 +1,4 @@
-# vuex-maps
+# dynamic-form-with-vuex
 
 ## Project setup
 ```
