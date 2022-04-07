@@ -3,7 +3,8 @@
     <nav>
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link> |
-      <router-link to="/cfdi">CFDI</router-link>
+      <router-link to="/cfdi">CFDI</router-link> |
+      <router-link to="/crud">CRUD</router-link>
     </nav>
     <router-view />
   </div>

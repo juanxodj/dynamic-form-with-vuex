@@ -16,13 +16,22 @@ export default new Vuex.Store({
       Folio: 1,
       Conceptos: [
         {
-          ClaveProdServ: "84111506",
+          ClaveProdServ: "123",
           Cantidad: 1,
           ClaveUnidad: "ACT",
           Descripcion: "Pago1",
           ValorUnitario: 0,
           Importe: 0,
           ObjetoImp: "01",
+        },
+        {
+          ClaveProdServ: "456",
+          Cantidad: 1,
+          ClaveUnidad: "ACT",
+          Descripcion: "Pago2",
+          ValorUnitario: 0,
+          Importe: 0,
+          ObjetoImp: "02",
         },
       ],
     },
@@ -38,6 +47,7 @@ export default new Vuex.Store({
         town: "Bar Town",
       },
     ],
+    indexEdit: null,
   },
   getters: {
     getField,
@@ -54,16 +64,16 @@ export default new Vuex.Store({
     deleteAddressRow(state, index) {
       state.addresses.splice(index, 1);
     },
-    addConcepto(state) {
-      state.form.Conceptos.push({
-        ClaveProdServ: "84111506",
-        Cantidad: 1,
-        ClaveUnidad: "ACT",
-        Descripcion: "Pago3",
-        ValorUnitario: 0,
-        Importe: 0,
-        ObjetoImp: "01",
-      });
+    pushConcepto(state, form) {
+      if (state.indexEdit === null) {
+        state.form.Conceptos.push(form);
+      } else {
+        state.form.Conceptos[state.indexEdit] = form;
+      }
+      state.indexEdit = null;
+    },
+    editConcepto(state, index) {
+      state.indexEdit = index;
     },
     addInformacionGlobal(state) {
       let InformacionGlobal = {

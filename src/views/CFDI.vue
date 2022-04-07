@@ -3,39 +3,31 @@
     <h1>Create CFDI</h1>
     <b-row>
       <b-col sm="6" md="3">
-        <b-form-group label="Serie">
-          <b-form-input v-model="Serie"></b-form-input>
+        <b-form-group label="ClaveProdServ">
+          <b-form-input v-model="form.ClaveProdServ"></b-form-input>
         </b-form-group>
       </b-col>
       <b-col sm="6" md="3">
-        <b-form-group label="Folio">
-          <b-form-input v-model="Folio"></b-form-input>
+        <b-form-group label="Cantidad">
+          <b-form-input v-model="form.Cantidad"></b-form-input>
         </b-form-group>
       </b-col>
-      <b-col md="12" mt-2>
-        <b-form-group label="Complemento">
-          <b-form-checkbox
-            v-model="statusCartaPorte"
-            @change="addComplemento('CartaPorte')"
-          >
-            Carta Porte
-          </b-form-checkbox>
-          <b-form-checkbox
-            v-model="statusPago"
-            @change="addComplemento('Pago')"
-          >
-            Pago
-          </b-form-checkbox>
-          <b-form-checkbox
-            v-model="statusComex"
-            @change="addComplemento('ComercioExterior')"
-          >
-            Comercio Exterior
-          </b-form-checkbox>
+      <b-col sm="6" md="3">
+        <b-form-group label="ClaveUnidad">
+          <b-form-input v-model="form.ClaveUnidad"></b-form-input>
         </b-form-group>
       </b-col>
+      <b-col sm="6" md="3">
+        <b-form-group label="Descripcion">
+          <b-form-input v-model="form.Descripcion"></b-form-input>
+        </b-form-group>
+      </b-col>
+    </b-row>
+    <b-row>
       <b-col md="12" mt-2>
-        <b-button size="sm" @click="addConcepto(form)">Agregar</b-button>
+        <b-button size="sm" @click="addConcepto">{{
+          indexEdit === null ? "Agregar" : "Actualizar"
+        }}</b-button>
       </b-col>
       <b-col md="12" mt-2>
         <b-table striped hover :items="Conceptos" :fields="fields" responsive>
@@ -43,12 +35,17 @@
             {{ row.index + 1 }}
           </template>
           <template #cell(actions)="row">
-            <b-button
-              size="sm"
-              @click="deleteConcepto(row.index)"
-              variant="danger"
-              >Delete</b-button
-            >
+            <b-button-group>
+              <b-button size="sm" @click="editConcepto(row)" variant="warning"
+                >Edit</b-button
+              >
+              <b-button
+                size="sm"
+                @click="deleteConcepto(row.index)"
+                variant="danger"
+                >Delete</b-button
+              >
+            </b-button-group>
           </template>
         </b-table>
       </b-col>
@@ -82,32 +79,48 @@ import { mapFields } from "vuex-map-fields";
 import GlobalInvoice from "./GlobalInvoice";
 
 export default {
+  name: "CFDI",
   components: {
     GlobalInvoice,
   },
   data() {
     return {
       fields: ["index", "ClaveProdServ", "Cantidad", "Descripcion", "actions"],
+      form: {
+        ClaveProdServ: "84111506",
+        Cantidad: 1,
+        ClaveUnidad: "ACT",
+        Descripcion: "Pago1",
+        ValorUnitario: 0,
+        Importe: 0,
+        ObjetoImp: "01",
+      },
     };
   },
   methods: {
-    ...mapMutations([
-      "addConcepto",
-      "deleteConcepto",
-      "addComplemento",
-      "addInformacionGlobal",
-    ]),
+    ...mapMutations(["pushConcepto", "deleteConcepto", "addInformacionGlobal"]),
+    addConcepto() {
+      this.pushConcepto(this.form);
+      this.form = {
+        ClaveProdServ: null,
+        Cantidad: null,
+        ClaveUnidad: null,
+        Descripcion: null,
+        ValorUnitario: null,
+        Importe: null,
+        ObjetoImp: null,
+      };
+    },
+    editConcepto(data) {
+      this.indexEdit = data.index;
+      this.form = data.item;
+    },
   },
   computed: {
     ...mapFields({
-      Version: "form.Version",
-      Serie: "form.Serie",
-      Folio: "form.Folio",
       Conceptos: "form.Conceptos",
-      statusCartaPorte: "statusCartaPorte",
-      statusPago: "statusPago",
-      statusComex: "statusComex",
       statusComponent: "statusComponent",
+      indexEdit: "indexEdit",
     }),
   },
 };
